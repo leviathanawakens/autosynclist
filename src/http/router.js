@@ -50,6 +50,7 @@ function sendHtml(res, html) {
 }
 
 function getBaseUrl(req, defaultPort) {
+  if (process.env.PUBLIC_URL) return process.env.PUBLIC_URL.replace(/\/+$/, '');
   const proto = req.headers['x-forwarded-proto'] || 'http';
   const host = req.headers['x-forwarded-host'] || req.headers.host || `localhost:${defaultPort}`;
   return `${proto}://${host}`;
@@ -80,16 +81,21 @@ async function handleRequest(req, res, settingsStore, syncService, config) {
 
     if (path === '/manifest.json' && method === 'GET') {
       const manifest = {
-        id: 'community.openmulti-watchlist',
+        id: 'community.autosynclist',
         version: '1.0.0',
-        name: 'OpenMulti Watchlist',
-        description: 'Merged watchlist from Trakt, Simkl, MDBList',
+        name: 'autosynclist',
+        description: 'Auto-sync your Trakt, Simkl and MDBList watchlists into unified Stremio catalogs.',
         resources: ['catalog', 'meta'],
         types: ['movie', 'series'],
+        idPrefixes: ['tt'],
         catalogs: [
-          { type: 'movie', id: 'openmulti-movie' },
-          { type: 'series', id: 'openmulti-series' }
-        ]
+          { type: 'movie', id: 'sync-list-movies', name: 'autosynclist Movies' },
+          { type: 'series', id: 'sync-list-series', name: 'autosynclist Series' },
+          { type: 'movie', id: 'continue-watching-movies', name: 'Continue Watching Movies' },
+          { type: 'series', id: 'continue-watching-series', name: 'Continue Watching Series' },
+          { type: 'series', id: 'unseen-series', name: 'Unseen Series' }
+        ],
+        behaviorHints: { configurable: true, configurationRequired: false }
       };
       sendJson(res, 200, manifest);
       return;
