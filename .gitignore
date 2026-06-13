@@ -1,0 +1,7 @@
+data/settings.json
+data/enrich-cache.json
+data/simkl-sync-state.json
+data/main-list.json
+node_modules/
+.env
+src/config.local.js
