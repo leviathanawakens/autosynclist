@@ -50,11 +50,11 @@ function sendHtml(res, html) {
 }
 
 function getBaseUrl(req, defaultPort) {
-  if (process.env.PUBLIC_URL) return process.env.PUBLIC_URL.replace(/\/+$/, '');
   const proto = req.headers['x-forwarded-proto'] || 'http';
-  let host = req.headers.host || `localhost:${defaultPort}`;
-  const fwdHost = req.headers['x-forwarded-host'];
-  if (fwdHost && fwdHost.includes('.') && fwdHost.length > host.length) host = fwdHost;
+  let host = req.headers['x-forwarded-host'] || req.headers.host || `localhost:${defaultPort}`;
+  if (req.headers['x-forwarded-host'] && !host.includes('.') && !host.includes(':')) {
+    host += '.baby-beamup.club';
+  }
   return `${proto}://${host}`;
 }
 
