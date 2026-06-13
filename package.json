@@ -1,0 +1,12 @@
+{
+  "name": "autosynclist",
+  "version": "1.0.0",
+  "description": "Stremio addon that syncs watchlists from Trakt, Simkl, and MDBList",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
